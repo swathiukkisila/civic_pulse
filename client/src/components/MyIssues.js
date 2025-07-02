@@ -17,7 +17,7 @@ const IssuesPage = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
 
-    fetch('http://localhost:5000/api/issues/my', {
+    fetch(`${process.env.REACT_APP_BASE_URL}/api/issues/my`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -33,7 +33,7 @@ const IssuesPage = () => {
     const token = localStorage.getItem('token');
 
     try {
-      const res = await fetch(`http://localhost:5000/api/issues/${id}`, {
+      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/issues/${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -65,7 +65,7 @@ const IssuesPage = () => {
     const token = localStorage.getItem('token');
 
     try {
-      const res = await fetch(`http://localhost:5000/api/issues/${id}`, {
+      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/issues/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -112,7 +112,7 @@ const IssuesPage = () => {
                   {issue.imageUrl && (
                     <Link to={`/issues/${issue._id}`}>
                       <img
-                        src={`http://localhost:5000${issue.imageUrl}`}
+                        src={`${process.env.REACT_APP_BASE_URL}${issue.imageUrl}`}
                         alt="Reported"
                         className="card-img-top"
                         style={{
@@ -151,7 +151,7 @@ const IssuesPage = () => {
                           className="form-control mb-2"
                           placeholder="Location"
                         />
-                       <p className="text-muted mb-3"><strong>Status:</strong> {editData.status}</p>
+                        <p className="text-muted mb-3"><strong>Status:</strong> {editData.status}</p>
                         <div className="d-flex">
                           <button
                             className="btn btn-success btn-sm me-2"

@@ -10,11 +10,13 @@ const Profile = () => {
   const [alert, setAlert] = useState({ type: '', message: '' });
   const [editMode, setEditMode] = useState(false);
 
+  const API_BASE_URL = process.env.REACT_APP_BASE_URL;
+
   useEffect(() => {
     const fetchProfile = async () => {
       const token = localStorage.getItem('token');
       try {
-        const res = await fetch('http://localhost:5000/api/users/profile', {
+        const res = await fetch(`${API_BASE_URL}/api/users/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -26,7 +28,7 @@ const Profile = () => {
 
         setProfile(data);
         setName(data.name);
-        if (data.avatar) setAvatarPreview(`http://localhost:5000/uploads/${data.avatar}`);
+        if (data.avatar) setAvatarPreview(`${API_BASE_URL}/uploads/${data.avatar}`);
       } catch (err) {
         console.error('Fetch profile error:', err);
         setProfile(null);
@@ -36,7 +38,7 @@ const Profile = () => {
     };
 
     fetchProfile();
-  }, []);
+  }, [API_BASE_URL]);
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
@@ -48,7 +50,7 @@ const Profile = () => {
       };
       reader.readAsDataURL(file);
     } else {
-      setAvatarPreview(profile?.avatar ? `http://localhost:5000/uploads/${profile.avatar}` : '');
+      setAvatarPreview(profile?.avatar ? `${API_BASE_URL}/uploads/${profile.avatar}` : '');
     }
   };
 
@@ -63,7 +65,7 @@ const Profile = () => {
     if (avatar) formData.append('avatar', avatar);
 
     try {
-      const res = await fetch('http://localhost:5000/api/users/profile', {
+      const res = await fetch(`${API_BASE_URL}/api/users/profile`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -240,7 +242,7 @@ const Profile = () => {
                       setEditMode(false);
                       setName(profile.name);
                       setAvatar(null);
-                      setAvatarPreview(profile.avatar ? `http://localhost:5000/uploads/${profile.avatar}` : '');
+                      setAvatarPreview(profile.avatar ? `${API_BASE_URL}/uploads/${profile.avatar}` : '');
                       setAlert({ type: '', message: '' });
                     }}
                     disabled={updating}

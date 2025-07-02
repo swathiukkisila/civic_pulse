@@ -6,10 +6,12 @@ const AdminLogin = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  const API_BASE_URL = process.env.REACT_APP_BASE_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/api/admin/login', {
+      const res = await fetch(`${API_BASE_URL}/api/admin/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -34,7 +36,7 @@ const AdminLogin = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        background: 'linear-gradient(135deg, #e3f2fd, #ffffff)', // light blue to white gradient
+        background: 'linear-gradient(135deg, #e3f2fd, #ffffff)',
         padding: '20px',
         fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
       }}

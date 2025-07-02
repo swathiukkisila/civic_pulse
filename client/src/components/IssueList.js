@@ -28,31 +28,29 @@ const IssuesPage = () => {
   const navigate = useNavigate();
   const userId = getUserIdFromToken();
 
-  // Helper: get priority badge based on upvotes count
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+
   const getPriorityBadge = (upvotesCount) => {
-    if (upvotesCount >= 7)
-      return <span className="badge bg-danger ms-2">High</span>;
-    if (upvotesCount >= 3)
-      return <span className="badge bg-warning text-dark ms-2">Medium</span>;
+    if (upvotesCount >= 7) return <span className="badge bg-danger ms-2">High</span>;
+    if (upvotesCount >= 3) return <span className="badge bg-warning text-dark ms-2">Medium</span>;
     return <span className="badge bg-success ms-2">Low</span>;
   };
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/issues')
+    fetch(`${BASE_URL}/api/issues`)
       .then(res => res.json())
       .then(data => {
-        // Sort by upvotes count descending
         const sortedIssues = data.sort((a, b) => b.upvotes.length - a.upvotes.length);
         setIssues(sortedIssues);
       })
       .catch(err => console.error(err));
-  }, []);
+  }, [BASE_URL]);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this issue?')) return;
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`http://localhost:5000/api/issues/${id}`, {
+      const res = await fetch(`${BASE_URL}/api/issues/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -81,7 +79,7 @@ const IssuesPage = () => {
   const handleUpdate = async (id) => {
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`http://localhost:5000/api/issues/${id}`, {
+      const res = await fetch(`${BASE_URL}/api/issues/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -94,7 +92,6 @@ const IssuesPage = () => {
 
       setIssues(prevIssues => {
         const updated = prevIssues.map(issue => (issue._id === id ? updatedIssue : issue));
-        // Keep sorted by upvotes descending
         return updated.sort((a, b) => b.upvotes.length - a.upvotes.length);
       });
 
@@ -117,7 +114,7 @@ const IssuesPage = () => {
     e.stopPropagation();
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`http://localhost:5000/api/issues/${issueId}/upvote`, {
+      const res = await fetch(`${BASE_URL}/api/issues/${issueId}/upvote`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -127,7 +124,6 @@ const IssuesPage = () => {
 
       setIssues(prevIssues => {
         const updated = prevIssues.map(issue => (issue._id === issueId ? updatedIssue : issue));
-        // Sort after update
         return updated.sort((a, b) => b.upvotes.length - a.upvotes.length);
       });
     } catch (error) {
@@ -162,7 +158,7 @@ const IssuesPage = () => {
                 >
                   {issue.imageUrl && (
                     <img
-                      src={`http://localhost:5000${issue.imageUrl}`}
+                      src={`${BASE_URL}${issue.imageUrl}`}
                       alt="Reported"
                       style={{ width: '100%', height: '160px', objectFit: 'cover' }}
                     />
@@ -213,7 +209,6 @@ const IssuesPage = () => {
                           <span>
                             <strong>{issue.upvotes.length}</strong> {issue.upvotes.length === 1 ? 'Vote' : 'Votes'}
                           </span>
-                          {/* Priority Badge based on upvotes */}
                           {getPriorityBadge(issue.upvotes.length)}
                         </div>
 

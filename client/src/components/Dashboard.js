@@ -21,12 +21,14 @@ const UserDashboard = () => {
     rejected: 0,
   });
 
+  const API_BASE_URL = process.env.REACT_APP_BASE_URL;
+
   const fetchStats = async () => {
     const token = localStorage.getItem('token');
     if (!token) return;
 
     try {
-      const res = await axios.get('http://localhost:5000/api/users/user/stats', {
+      const res = await axios.get(`${API_BASE_URL}/api/users/user/stats`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

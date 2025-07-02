@@ -1,13 +1,14 @@
-// CommentSection.jsx
 import React, { useEffect, useState } from 'react';
 
 const CommentSection = ({ issueId }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
 
+  const API_BASE_URL = process.env.REACT_APP_BASE_URL;
+
   const fetchComments = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/issues/${issueId}/comments`);
+      const res = await fetch(`${API_BASE_URL}/api/issues/${issueId}/comments`);
       const data = await res.json();
       setComments(data);
     } catch (error) {
@@ -24,7 +25,7 @@ const CommentSection = ({ issueId }) => {
     if (!newComment.trim()) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/issues/${issueId}/comments`, {
+      const res = await fetch(`${API_BASE_URL}/api/issues/${issueId}/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

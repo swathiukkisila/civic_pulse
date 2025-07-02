@@ -9,6 +9,7 @@ const ReportIssueForm = () => {
   const [image, setImage] = useState(null);
 
   const navigate = useNavigate();
+  const API_BASE_URL = process.env.REACT_APP_BASE_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,7 +24,7 @@ const ReportIssueForm = () => {
     const token = localStorage.getItem('token');
 
     try {
-      const response = await fetch('http://localhost:5000/api/issues', {
+      const response = await fetch(`${API_BASE_URL}/api/issues`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -89,15 +90,14 @@ const ReportIssueForm = () => {
           </div>
 
           <div className="mb-3">
-          <label className="form-label fw-semibold">Status</label>
-          <input
-            type="text"
-            className="form-control"
-            value="Pending"
-            readOnly
-          />
-        </div>
-
+            <label className="form-label fw-semibold">Status</label>
+            <input
+              type="text"
+              className="form-control"
+              value="Pending"
+              readOnly
+            />
+          </div>
 
           <div className="mb-3">
             <label className="form-label fw-semibold">Upload Image (optional)</label>

@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
 function IssueItem({ issue, token, userId }) {
-  // issue: { _id, title, description, upvotes: [userId1, userId2, ...] }
-  // token: JWT token string
-  // userId: logged in user's ID
-
   const [upvotes, setUpvotes] = useState(issue.upvotes || []);
   const [isUpvoted, setIsUpvoted] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const API_BASE_URL = process.env.REACT_APP_BASE_URL;
 
   useEffect(() => {
     // Check if current user has already upvoted
@@ -19,8 +17,8 @@ function IssueItem({ issue, token, userId }) {
 
     try {
       const url = isUpvoted
-        ? `http://localhost:5000/api/issues/${issue._id}/remove-upvote`
-        : `http://localhost:5000/api/issues/${issue._id}/upvote`;
+        ? `${API_BASE_URL}/api/issues/${issue._id}/remove-upvote`
+        : `${API_BASE_URL}/api/issues/${issue._id}/upvote`;
 
       const response = await fetch(url, {
         method: 'POST',

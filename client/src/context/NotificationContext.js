@@ -6,17 +6,19 @@ export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
   const token = localStorage.getItem('token') || localStorage.getItem('adminToken');
 
+  const API_BASE_URL = process.env.REACT_APP_BASE_URL;
+
   const fetchNotifications = async () => {
     if (!token) return;
     try {
-      const res = await fetch('http://localhost:5000/api/notifications', {
+      const res = await fetch(`${API_BASE_URL}/api/notifications`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
-      setNotifications(Array.isArray(data) ? data : []); // ✅ Safe fallback
+      setNotifications(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Failed to fetch notifications', err);
-      setNotifications([]); // fallback to empty array
+      setNotifications([]);
     }
   };
 
@@ -26,7 +28,7 @@ export const NotificationProvider = ({ children }) => {
 
   const markNotificationAsRead = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/notifications/${id}/read`, {
+      const res = await fetch(`${API_BASE_URL}/api/notifications/${id}/read`, {
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${token}`,
